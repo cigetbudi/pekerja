@@ -2,14 +2,13 @@ package main
 
 import (
 	"pekerja/db"
-
-	"github.com/labstack/echo/v4"
+	"pekerja/routes"
 )
 
 func main() {
 	db.Init()
-	route := echo.New()
+	route := routes.Init()
 
-	route.Start(":6666")
+	route.Start(":3435")
 
 }

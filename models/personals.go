@@ -1,7 +1,9 @@
 package models
 
 import (
+	"errors"
 	"pekerja/db"
+	"strconv"
 	"time"
 )
 
@@ -19,6 +21,17 @@ type Personals struct {
 
 func (p *Personals) CreatePersonal() error {
 	if err := db.DB.Create(p).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (p *Personals) UpdatePersonal(sID string) error {
+	id, err := strconv.Atoi(sID)
+	if err != nil {
+		return errors.New("xxx...")
+	}
+	if err := db.DB.Model(&Personals{}).Where("id =?", id).Updates(p).Error; err != nil {
 		return err
 	}
 	return nil

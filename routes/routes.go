@@ -11,6 +11,7 @@ func Init() *echo.Echo {
 
 	route.GET("personal/cari", controllers.FetchAllPersonal)
 	route.POST("personal/tambah", controllers.AddPersonal)
+	route.PUT("personal/edit/:id", controllers.EditPersonal)
 
 	return route
 }

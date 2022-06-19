@@ -9,6 +9,7 @@ type Personals struct {
 	Phone     string
 	Umur      int
 	Pekerjaan int
+	IsActive  bool
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

@@ -4,7 +4,9 @@ import (
 	"net/http"
 	"pekerja/helpers"
 	"pekerja/models"
+	"time"
 
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4"
 )
 
@@ -21,9 +23,23 @@ func CheckLogin(c echo.Context) error {
 	if !res {
 		return echo.ErrUnauthorized
 	}
-	return c.String(http.StatusOK, "berhasil login")
-	//generate token
+	// return c.String(http.StatusOK, "berhasil login")
+	// generate token
 
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	claims := token.Claims.(jwt.MapClaims)
+	claims["username"] = username
+	claims["level"] = "application"
+	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+
+	t, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, map[string]string{
+		"token": t,
+	})
 }
 
 func GenerateHashPass(c echo.Context) error {

@@ -11,7 +11,8 @@ func Init() *echo.Echo {
 
 	route.GET("personal/cari", controllers.FetchAllPersonal)
 	route.POST("personal/tambah", controllers.AddPersonal)
-	route.PUT("personal/edit/:id", controllers.EditPersonal)
+	route.PUT("personal/edit/:email", controllers.EditPersonal)
+	route.DELETE("personal/hapus/:email", controllers.HapusPersonal)
 
 	return route
 }

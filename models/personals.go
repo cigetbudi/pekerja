@@ -1,14 +1,12 @@
 package models
 
 import (
-	"errors"
 	"pekerja/db"
-	"strconv"
 	"time"
 )
 
 type Personals struct {
-	Id        int       `json:"id" gorm:"primaryKey"`
+	Email     string    `json:"email" gorm:"primaryKey"`
 	Nama      string    `json:"nama"`
 	Alamat    string    `json:"alamat"`
 	Phone     string    `json:"phone"`
@@ -26,12 +24,15 @@ func (p *Personals) CreatePersonal() error {
 	return nil
 }
 
-func (p *Personals) UpdatePersonal(sID string) error {
-	id, err := strconv.Atoi(sID)
-	if err != nil {
-		return errors.New("xxx...")
+func (p *Personals) UpdatePersonal(email string) error {
+	if err := db.DB.Model(&Personals{}).Where("email =?", email).Updates(p).Error; err != nil {
+		return err
 	}
-	if err := db.DB.Model(&Personals{}).Where("id =?", id).Updates(p).Error; err != nil {
+	return nil
+}
+
+func (p *Personals) DeletePersonal() error {
+	if err := db.DB.Delete(p).Error; err != nil {
 		return err
 	}
 	return nil
@@ -43,8 +44,8 @@ func GetAll(key string) ([]Personals, error) {
 	return ps, result.Error
 }
 
-func GetById(id int) (Personals, error) {
+func GetByEmail(email string) (Personals, error) {
 	var p Personals
-	result := db.DB.Where("id= ?", id).First(&p)
+	result := db.DB.Where("email= ?", email).First(&p)
 	return p, result.Error
 }

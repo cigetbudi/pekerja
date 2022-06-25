@@ -65,13 +65,27 @@ func EditPersonal(c echo.Context) error {
 	p := new(models.Personals)
 	c.Bind(p)
 	response := new(models.Response)
-	if p.UpdatePersonal(c.Param("id")) != nil { //method update
+	if p.UpdatePersonal(c.Param("email")) != nil { //method update
 		response.ErrorCode = 10
 		response.Message = "Gagal dalam mengedit data personal"
 	} else {
 		response.ErrorCode = 0
 		response.Message = "Berhasil edit data personal"
 		response.Data = *p
+	}
+	return c.JSON(http.StatusOK, response)
+}
+
+func HapusPersonal(c echo.Context) error {
+	p, _ := models.GetByEmail(c.Param("email")) // mwthod get by email
+	response := new(models.Response)
+	if p.DeletePersonal() != nil {
+		response.ErrorCode = 10
+		response.Message = "Gagal dalam menghapus data personal"
+	} else {
+		response.ErrorCode = 0
+		response.Message = "Berhasil menghapus data personal"
+		response.Data = p.Email
 	}
 	return c.JSON(http.StatusOK, response)
 }

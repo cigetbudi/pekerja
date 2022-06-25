@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"net/http"
 	"pekerja/controllers"
 	"pekerja/middleware"
 
@@ -10,7 +11,12 @@ import (
 func Init() *echo.Echo {
 	route := echo.New()
 
-	route.GET("/", controllers.FetchAllPersonal)
+	route.GET("/", func(c echo.Context) error {
+		return c.HTML(
+			http.StatusOK,
+			"<h1>Halo Makhluk Halus</h1><br /><3<3<3",
+		)
+	})
 	route.GET("personal/cari", controllers.FetchAllPersonal)
 	route.POST("personal/tambah", controllers.AddPersonal, middleware.IsAuthenticated)
 	route.PUT("personal/edit/:email", controllers.EditPersonal, middleware.IsAuthenticated)

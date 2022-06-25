@@ -3,32 +3,42 @@ package models
 import (
 	"pekerja/db"
 	"time"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type Personals struct {
-	Email     string    `json:"email" gorm:"primaryKey"`
-	Nama      string    `json:"nama"`
+	Email     string    `json:"email" gorm:"primaryKey" validate:"required,email"`
+	Nama      string    `json:"nama" validate:"required"`
 	Alamat    string    `json:"alamat"`
-	Phone     string    `json:"phone"`
-	Umur      int       `json:"umur"`
-	Pekerjaan int       `json:"pekerjaan"`
+	Phone     string    `json:"phone" validate:"e164"`
+	Umur      int       `json:"umur" validate:"gte=0,lte=130"`
+	Pekerjaan int       `json:"pekerjaan" validate:"required,numeric"`
 	IsActive  bool      `json:"is_active"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func (p *Personals) CreatePersonal() error {
-	if err := db.DB.Create(p).Error; err != nil {
-		return err
+	v := validator.New()
+	var res error
+	if err := v.Struct(p); err != nil {
+		res = err
+	} else if err := db.DB.Create(p).Error; err != nil {
+		res = err
 	}
-	return nil
+	return res
 }
 
 func (p *Personals) UpdatePersonal(email string) error {
-	if err := db.DB.Model(&Personals{}).Where("email =?", email).Updates(p).Error; err != nil {
-		return err
+	v := validator.New()
+	var res error
+	if err := v.Struct(p); err != nil {
+		res = err
+	} else if err := db.DB.Model(&Personals{}).Where("email =?", email).Updates(p).Error; err != nil {
+		res = err
 	}
-	return nil
+	return res
 }
 
 func (p *Personals) DeletePersonal() error {

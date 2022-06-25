@@ -52,7 +52,7 @@ func AddPersonal(c echo.Context) error {
 	response := new(models.Response)
 	if p.CreatePersonal() != nil { //method create
 		response.ErrorCode = 10
-		response.Message = "Gagal menambahkan data personal"
+		response.Message = p.CreatePersonal().Error()
 	} else {
 		response.ErrorCode = 0
 		response.Message = "Sukses menambahkan data user"
@@ -67,7 +67,7 @@ func EditPersonal(c echo.Context) error {
 	response := new(models.Response)
 	if p.UpdatePersonal(c.Param("email")) != nil { //method update
 		response.ErrorCode = 10
-		response.Message = "Gagal dalam mengedit data personal"
+		response.Message = p.UpdatePersonal("email").Error()
 	} else {
 		response.ErrorCode = 0
 		response.Message = "Berhasil edit data personal"

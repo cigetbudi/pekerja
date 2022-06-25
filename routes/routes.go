@@ -14,7 +14,7 @@ func Init() *echo.Echo {
 	route.GET("/", func(c echo.Context) error {
 		return c.HTML(
 			http.StatusOK,
-			"<h1>Halo Makhluk Halus</h1><br /><marquee><h2><3<3<3</h2></marquee>",
+			"<h1>Halo Makhluk Halus</h1><br /><marquee><h2>&hearts;&hearts;&hearts;</h2></marquee>",
 		)
 	})
 	route.GET("personal/cari", controllers.FetchAllPersonal)

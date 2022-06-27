@@ -30,3 +30,16 @@ func CheckLogin(un, pass string) (bool, error) {
 	}
 	return true, nil
 }
+
+func (u *Users) CreateUser() error {
+	var res error
+	hPass, err := helpers.HashPassword(u.Password)
+	if err != nil {
+		res = err
+	}
+	u.Password = hPass
+	if err := db.DB.Create(u).Error; err != nil {
+		res = err
+	}
+	return res
+}

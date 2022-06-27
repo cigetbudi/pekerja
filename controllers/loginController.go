@@ -50,3 +50,19 @@ func GenerateHashPass(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, hash)
 }
+
+func Register(c echo.Context) error {
+	u := new(models.Users)
+	c.Bind(u)
+
+	r := new(models.Response)
+	if u.CreateUser() != nil { //method CreateUser
+		r.ErrorCode = 10
+		r.Message = u.CreateUser().Error()
+	} else {
+		r.ErrorCode = 0
+		r.Message = "Berhasil Registrasi"
+		r.Data = *u
+	}
+	return c.JSON(http.StatusCreated, r)
+}

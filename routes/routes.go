@@ -22,6 +22,7 @@ func Init() *echo.Echo {
 	route.PUT("personal/edit/:email", controllers.EditPersonal, middleware.IsAuthenticated)
 	route.DELETE("personal/hapus/:email", controllers.HapusPersonal, middleware.IsAuthenticated)
 
+	route.POST("user/register", controllers.Register)
 	route.GET("/genhash/:password", controllers.GenerateHashPass)
 	route.POST("/login", controllers.CheckLogin)
 	return route
